@@ -41,6 +41,6 @@ var commands = {
 		console.log(Math.floor(process.uptime() * 10) / 10 + 's');
 	},
 	clear : function () {
-		console.log('\033[2J');
+		console.log("\u001b[2J\u001b[0;0H");
 	}
 }
