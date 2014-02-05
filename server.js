@@ -6,28 +6,37 @@ var x = 0;
 module.exports = function () {
 	server = net.createServer(function (c) {
 		client[x++] = c;
-
-		sendAll('[SERVER] User connected to the session : ');
+		getUser(c);
+		// sendAll();
 
 		c.on('end', function () {
 			console.log('[SERVER] Connection stopped');
 		});
 
 		c.on('data', function (data) {
-			sendAll(JSON.parse(data));
+			data = JSON.parse(data);
+			if (data.msg == 'cmd') {
+				sendAll('[SERVER] Somebody entered : ' + data.cmd);
+			}
+			else {
+				sendAll(data);
+			}
+			
 		});
-		
+
 		// c.pipe(c);
 	}).listen(9648);
 }
 
 function sendAll(str) {
+	console.log(str);
 	for (i = 0; i < client.length; i++) {
 		if (typeof str == 'string') {
+			
 			var obj = {
 				msg : str,
 				color : 'yellow'
-			}
+			};
 			client[i].write(JSON.stringify(obj));
 		}
 		else {
@@ -39,4 +48,8 @@ function sendAll(str) {
 		}
 
 	}
+}
+
+function getUser(c) {
+	c.write(JSON.stringify({msg:'cmd',cmd:'getuser'}))
 }

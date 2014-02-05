@@ -5,29 +5,46 @@ var color = 'green';
 var colorpick = 0;
 
 module.exports = function () {
-	var user = '#';
+	console.log('Please fill in your username :');
+	var event = process.stdin.on('data', setup);
 
+}
+
+function startClient(user) {
 	var client = net.connect({port:9648}, function () {
-			console.log('Client connected\r\n'.green);
-			console.log(client.address());
-			process.stdin.resume();
+		console.log('Client connected\r\n'.green);
+		console.log(client.address());
+		process.stdin.resume();
 
-			process.stdin.on('data', function (chunk) {
-				if (commands.check(chunk)) {
-					var com = {
-						msg : chunk+'',
-						user : user,
-						color : color
-					};
-					client.write(JSON.stringify(com));
-				}
-			});
+		process.stdin.on('data', function (chunk) {
+			if (commands.check(chunk)) {
+				var com = {
+					msg : chunk+'',
+					user : user.split('\n')[0],
+					color : color
+				};
+				client.write(JSON.stringify(com));
+			}
+		});
 	});
 
 	client.on('data', function (data) {
 		data = JSON.parse(data.toString());
-		console.log(eval('data.msg.' + data.color));
+		if (data.msg != 'cmd') {
+			console.log(eval('data.msg.' + data.color));	
+		}
+		else {
+			if (data.cmd == 'getuser') {
+				client.write({msg:'cmd',cmd:user});	
+			}
+		}
 	});
+}
+
+function setup (chunk) {
+	var user = chunk+'';
+	this.removeListener('data', setup);
+	startClient(user);
 }
 
 var commands = {
