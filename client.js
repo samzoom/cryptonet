@@ -1,9 +1,11 @@
 //client.js
 var net = require('net');
-var readline = require('readline');
 var colors = require('colors');
+var color = 'green';
+var colorpick = 0;
 
 module.exports = function () {
+	var user = '#';
 
 	var client = net.connect({port:9648}, function () {
 			console.log('Client connected\r\n'.green);
@@ -12,13 +14,19 @@ module.exports = function () {
 
 			process.stdin.on('data', function (chunk) {
 				if (commands.check(chunk)) {
-					client.write(chunk);
+					var com = {
+						msg : chunk+'',
+						user : user,
+						color : color
+					};
+					client.write(JSON.stringify(com));
 				}
 			});
 	});
 
 	client.on('data', function (data) {
-		console.log((data.toString()).yellow);
+		data = JSON.parse(data.toString());
+		console.log(eval('data.msg.' + data.color));
 	});
 }
 
@@ -42,5 +50,21 @@ var commands = {
 	},
 	clear : function () {
 		console.log("\u001b[2J\u001b[0;0H");
+		console.log('Cleared'.red);
+	},
+	color : function () {
+		var cols = [
+			'green',
+			'blue',
+			'red',
+			'yellow',
+			'white',
+			'grey'
+		]
+		if (colorpick > 5) {
+			colorpick = 0;
+		}
+		color = cols[colorpick++];
+		console.log(('Picked ' + color + ' as the next color').yellow)
 	}
 }

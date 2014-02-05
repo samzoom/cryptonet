@@ -14,18 +14,29 @@ module.exports = function () {
 		});
 
 		c.on('data', function (data) {
-			sendAll(data);
+			sendAll(JSON.parse(data));
 		});
-
-
-
-		c.write('You connected to the server.\r\n');
+		
 		// c.pipe(c);
 	}).listen(9648);
 }
 
 function sendAll(str) {
 	for (i = 0; i < client.length; i++) {
-		client[i].write(str)
+		if (typeof str == 'string') {
+			var obj = {
+				msg : str,
+				color : 'yellow'
+			}
+			client[i].write(JSON.stringify(obj));
+		}
+		else {
+			var obj = {
+				msg : str.user + ' : ' + str.msg,
+				color : str.color
+			}
+			client[i].write(JSON.stringify(obj))
+		}
+
 	}
 }
