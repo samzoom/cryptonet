@@ -20,7 +20,7 @@ function startClient(user) {
 		process.stdin.on('data', function (chunk) {
 			if (commands.check(chunk)) {
 				var com = {
-					msg : crypt.encrypt(chunk+'', 'aes192','swag'),
+					msg : crypt.encrypt(chunk+'', 'aes192', passwd),
 					user : user.split('\n')[0],
 					color : color
 				};
