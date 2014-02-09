@@ -2,7 +2,7 @@ var crypto = require('crypto');
 var clearEncoding = 'utf8';
 var cipherEncoding = 'hex';
 
-module.exports = { 
+module.exports = {
 	encrypt : function (str, algo, passwd) {
 		var cipher = crypto.createCipher(algo, passwd);
 
@@ -17,7 +17,7 @@ module.exports = {
 	decrypt : function (str, algo, passwd) {
 		var plainChunks = [];
 		try {
-			var decipher = crypto.createDecipher(algo, passwd);	
+			var decipher = crypto.createDecipher(algo, passwd);
 			for (var i = 0;i < str.length;i++) {
 
 			  plainChunks.push(decipher.update(str[i], cipherEncoding, clearEncoding));
@@ -29,7 +29,8 @@ module.exports = {
 
 		}
 		catch (err) {
-			return plainChunks.join('');
+			console.log(plainChunks);
+			return '';
 		}
 	}
 }

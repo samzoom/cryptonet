@@ -3,7 +3,8 @@ var net = require('net');
 var crypt = require('./crypt.js')
 var colors = require('colors');
 var color = 'green';
-var colorpick = 0;
+
+var passwd = 'swag';
 
 module.exports = function () {
 	console.log('Please fill in your username :');
@@ -23,7 +24,7 @@ function startClient(user) {
 					user : user.split('\n')[0],
 					color : color
 				};
-				console.log(JSON.stringify(com));
+				// console.log(JSON.stringify(com));
 				client.write(JSON.stringify(com));
 			}
 		});
@@ -32,11 +33,11 @@ function startClient(user) {
 	client.on('data', function (data) {
 		data = JSON.parse(data.toString());
 		if (data.msg != 'cmd') {
-			console.log(eval("crypt.decrypt(data.msg, 'aes192', 'swag')." + data.color));
+			console.log(eval("crypt.decrypt(data.msg, 'aes192', '" + passwd + "')." + data.color));
 		}
 		else {
 			if (data.cmd == 'getuser') {
-				client.write(JSON.stringify({msg:'cmd',cmd:user}));	
+				client.write(JSON.stringify({msg:'cmd',cmd:user}));
 			}
 		}
 	});
@@ -50,9 +51,10 @@ function setup (chunk) {
 
 var commands = {
 	check : function (cmd) {
+		cmd = cmd.toString().replace(/\r/g,'').replace(/\n/g,'').split(' ');
 		try {
-			if (eval('commands.' + cmd)) {
-				eval('commands.' + cmd)();
+			if (eval('commands.' + cmd[0])) {
+				eval('commands.' + cmd[0])(cmd);
 				return false;
 			}
 			else {
@@ -70,19 +72,31 @@ var commands = {
 		console.log("\u001b[2J\u001b[0;0H");
 		console.log('Cleared'.red);
 	},
-	color : function () {
-		var cols = [
-			'green',
-			'blue',
-			'red',
-			'yellow',
-			'white',
-			'grey'
-		]
-		if (colorpick > 5) {
-			colorpick = 0;
+	color : function (arg) {
+		var poscol = {
+			green:true,
+			blue:true,
+			red:true,
+			yellow:true,
+			grey:true,
+			black:true,
+			white:true
 		}
-		color = cols[colorpick++];
-		console.log(('Picked ' + color + ' as the next color').yellow)
+
+		if (!arg[1]) console.log("You haven't selected a color");
+		else {
+			if (eval('poscol.' + arg[1])) {
+				color = arg[1];
+				console.log(('Picked ' + color + ' as the next color').yellow)
+			}
+			else {
+				console.log('Color wasn\'t found.')
+			}
+		}
+
+	},
+	password : function (arg) {
+		passwd = arg[1];
+		console.log('Password is set to : ' + arg[1]);
 	}
 }

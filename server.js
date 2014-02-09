@@ -21,7 +21,7 @@ module.exports = function () {
 			else {
 				sendAll(data);
 			}
-			
+
 		});
 
 		// c.pipe(c);
@@ -31,7 +31,7 @@ module.exports = function () {
 function sendAll(str) {
 	for (i = 0; i < client.length; i++) {
 		if (typeof str == 'string') {
-			
+
 			var obj = {
 				msg : str,
 				color : 'yellow'
