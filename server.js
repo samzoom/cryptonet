@@ -29,7 +29,6 @@ module.exports = function () {
 }
 
 function sendAll(str) {
-	console.log(str);
 	for (i = 0; i < client.length; i++) {
 		if (typeof str == 'string') {
 			
