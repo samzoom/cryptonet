@@ -7,12 +7,11 @@ var colorpick = 0;
 module.exports = function () {
 	console.log('Please fill in your username :');
 	var event = process.stdin.on('data', setup);
-
 }
 
 function startClient(user) {
 	var client = net.connect({port:9648}, function () {
-		console.log('Client connected\r\n'.green);
+		console.log('Client connected'.green);
 		console.log(client.address());
 		process.stdin.resume();
 
@@ -35,7 +34,7 @@ function startClient(user) {
 		}
 		else {
 			if (data.cmd == 'getuser') {
-				client.write({msg:'cmd',cmd:user});	
+				client.write(JSON.stringify({msg:'cmd',cmd:user}));	
 			}
 		}
 	});
