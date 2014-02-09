@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 //Wrapper for cryptonet
 
 if (process.argv[2] == 'client') {

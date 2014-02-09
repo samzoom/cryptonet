@@ -1,5 +1,6 @@
 //client.js
 var net = require('net');
+var crypt = require('./crypt.js')
 var colors = require('colors');
 var color = 'green';
 var colorpick = 0;
@@ -18,10 +19,11 @@ function startClient(user) {
 		process.stdin.on('data', function (chunk) {
 			if (commands.check(chunk)) {
 				var com = {
-					msg : chunk+'',
+					msg : crypt.encrypt(chunk+'', 'aes192','swag'),
 					user : user.split('\n')[0],
 					color : color
 				};
+				console.log(JSON.stringify(com));
 				client.write(JSON.stringify(com));
 			}
 		});
@@ -30,7 +32,7 @@ function startClient(user) {
 	client.on('data', function (data) {
 		data = JSON.parse(data.toString());
 		if (data.msg != 'cmd') {
-			console.log(eval('data.msg.' + data.color));	
+			console.log(eval("crypt.decrypt(data.msg, 'aes192', 'swag')." + data.color));
 		}
 		else {
 			if (data.cmd == 'getuser') {

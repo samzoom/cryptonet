@@ -16,7 +16,7 @@ module.exports = function () {
 		c.on('data', function (data) {
 			data = JSON.parse(data);
 			if (data.msg == 'cmd') {
-				sendAll('[SERVER] Somebody entered : ' + data.cmd);
+				// sendAll('[SERVER] Somebody entered : ' + data.cmd);
 			}
 			else {
 				sendAll(data);
@@ -40,7 +40,8 @@ function sendAll(str) {
 		}
 		else {
 			var obj = {
-				msg : str.user + ' : ' + str.msg,
+				usr : str.usr,
+				msg : str.msg,
 				color : str.color
 			}
 			client[i].write(JSON.stringify(obj))
