@@ -3,6 +3,8 @@ var net = require('net');
 var crypt = require('./crypt.js')
 var colors = require('colors');
 var color = 'green';
+var client;
+var user;
 
 var passwd = 'swag';
 
@@ -11,8 +13,8 @@ module.exports = function () {
 	var event = process.stdin.on('data', setup);
 }
 
-function startClient(user) {
-	var client = net.connect({port:9648}, function () {
+function startClient() {
+	client = net.connect({port:9648}, function () {
 		console.log('Client connected'.green);
 		console.log(client.address());
 		process.stdin.resume();
@@ -24,7 +26,6 @@ function startClient(user) {
 					user : user.split('\n')[0],
 					color : color
 				};
-				// console.log(JSON.stringify(com));
 				client.write(JSON.stringify(com));
 			}
 		});
@@ -44,9 +45,9 @@ function startClient(user) {
 }
 
 function setup (chunk) {
-	var user = chunk+'';
+	user = chunk+'';
 	this.removeListener('data', setup);
-	startClient(user);
+	startClient();
 }
 
 var commands = {
@@ -98,5 +99,14 @@ var commands = {
 	password : function (arg) {
 		passwd = arg[1];
 		console.log('Password is set to : ' + arg[1]);
+	},
+	exit : function () {
+		client.write(JSON.stringify({
+			msg : crypt.encrypt(user + ' : left the server.'),
+			user : user,
+			color : color
+		}));
+		console.log('Thank you for using Cryptnet!');
+		process.exit(0);
 	}
 }
