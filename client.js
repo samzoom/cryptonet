@@ -45,7 +45,7 @@ function startClient() {
 }
 
 function setup (chunk) {
-	user = chunk+'';
+	user = (chunk+'').replace(/\n/g, '');
 	this.removeListener('data', setup);
 	startClient();
 }
@@ -101,12 +101,15 @@ var commands = {
 		console.log('Password is set to : ' + arg[1]);
 	},
 	exit : function () {
-		client.write(JSON.stringify({
-			msg : crypt.encrypt(user + ' : left the server.'),
-			user : user,
-			color : color
-		}));
-		console.log('Thank you for using Cryptnet!');
+		// var obj = {
+		// 	msg : crypt.encrypt(user + ' left the server.', 'aes192', passwd),
+		// 	user : user,
+		// 	color : color
+		// }
+		// client.write(JSON.stringify(obj));
+
+		console.log('Thank you for using Cryptnet!'.red);
+		client.end();
 		process.exit(0);
 	}
 }
