@@ -12,4 +12,8 @@ When user disconnects server crashes upon next text transfer, need to remove lef
 
 ## Install & run
 
+<<<<<<< HEAD
 Just clone this repo and startup index.js with `./index.js` and start up another clien with `./index.js client`.
+=======
+Just clone this repo and startup index.js with '''./index.js''' and start up another clien with '''./index.js client'''.
+>>>>>>> dcf7e51831ba56795e0574e0f6c53a2ecaaa9077
