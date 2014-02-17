@@ -5,16 +5,21 @@ var colors = require('colors');
 var color = 'green';
 var client;
 var user;
+var ip;
+var setuptimes=0;
 
-var passwd = 'swag';
+var passwd = 'default';
 
 module.exports = function () {
 	console.log('Please fill in your username :');
-	var event = process.stdin.on('data', setup);
+	process.stdin.on('data', setup);
 }
 
 function startClient() {
-	client = net.connect({port:9648}, function () {
+	client = net.connect({
+		port:parseInt(ip.split(':')[1]),
+		host:ip.split(':')[0]
+	}, function () {
 		console.log('Client connected'.green);
 		console.log(client.address());
 		process.stdin.resume();
@@ -45,9 +50,17 @@ function startClient() {
 }
 
 function setup (chunk) {
-	user = (chunk+'').replace(/\n/g, '');
-	this.removeListener('data', setup);
-	startClient();
+	setuptimes++;
+	if (setuptimes == 1) {
+		user = chunk.toString().replace(/\n/g, '');
+		console.log("\u001b[2J\u001b[0;0H");
+		console.log('Please insert ip and port (ip:port -> localhost:9648)')
+	}
+	else {
+		ip = chunk.toString().replace(/\n/g, '');
+		this.removeListener('data', setup);
+		startClient();
+	}
 }
 
 var commands = {
