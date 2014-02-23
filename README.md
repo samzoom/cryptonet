@@ -12,5 +12,5 @@ So I did.
 
 ## Install & run
 
-Just clone this repo and startup index.js with `./index.js` and start up another clien with `./index.js client`.
+Just clone this repo and startup index.js with `./index.js` and start up another client with `./index.js client`.
 
