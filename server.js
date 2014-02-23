@@ -13,9 +13,21 @@ module.exports = function () {
 			}
 		});
 		c.on('end', function () {
-			console.log(client + '')
 			delete client[c.id];
-			console.log(client + '')
+			rebuildClients();
 		})
 	}).listen(9648);
+}
+
+function rebuildClients() {
+	var clients = 0;
+	var newClients = [];
+	for (i = 0; i < client.length; i++) {
+		console.log(client[i] != undefined);
+		if (client[i] != undefined) {
+			newClients[clients++] = client[i];
+		}
+	}
+	delete client;
+	client = newClients;
 }
