@@ -5,8 +5,11 @@ var x = 0;
 
 module.exports = function () {
 	server = net.createServer(function (c) {
+		console.log(client);
 		c.id = x;
 		client[x++] = c;
+		console.log(client+'');
+		console.log(x);
 		c.on('data', function (data) {
 			for (i = 0; i < client.length; i++) {
 				client[i].write(data);
@@ -23,11 +26,11 @@ function rebuildClients() {
 	var clients = 0;
 	var newClients = [];
 	for (i = 0; i < client.length; i++) {
-		console.log(client[i] != undefined);
 		if (client[i] != undefined) {
 			newClients[clients++] = client[i];
 		}
 	}
 	delete client;
 	client = newClients;
+	x = client.length - 1;
 }

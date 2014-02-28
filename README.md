@@ -8,7 +8,7 @@ So I did.
 
 ## Known issues
 
-*awkward silence*
+If a user leaves the session and another rejoins, the server can't receive some of the data. (?)
 
 ## Install & run
 

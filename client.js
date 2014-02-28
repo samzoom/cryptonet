@@ -41,11 +41,6 @@ function startClient() {
 		if (data.msg != 'cmd') {
 			console.log(eval("crypt.decrypt(data.msg, 'aes192', '" + passwd + "')." + data.color));
 		}
-		else {
-			if (data.cmd == 'getuser') {
-				client.write(JSON.stringify({msg:'cmd',cmd:user}));
-			}
-		}
 	});
 }
 
@@ -58,6 +53,7 @@ function setup (chunk) {
 	}
 	else {
 		ip = chunk.toString().replace(/\n/g, '');
+		if (ip.length<3) ip = 'localhost:9648';
 		this.removeListener('data', setup);
 		startClient();
 	}
@@ -84,7 +80,6 @@ var commands = {
 	},
 	clear : function () {
 		console.log("\u001b[2J\u001b[0;0H");
-		console.log('Cleared'.red);
 	},
 	color : function (arg) {
 		var poscol = {
@@ -114,15 +109,17 @@ var commands = {
 		console.log('Password is set to : ' + arg[1]);
 	},
 	exit : function () {
-		// var obj = {
-		// 	msg : crypt.encrypt(user + ' left the server.', 'aes192', passwd),
-		// 	user : user,
-		// 	color : color
-		// }
-		// client.write(JSON.stringify(obj));
+		var obj = {
+			msg : crypt.encrypt(user + ' left the server.', 'aes192', passwd),
+			user : user,
+			color : color
+		}
+		client.write(JSON.stringify(obj), function () {
+			console.log('Thank you for using Cryptnet!'.red);
+			client.end();
+			commands.clear();
+			console.log('Press any button to crash cryptonet.')
+		});
 
-		console.log('Thank you for using Cryptnet!'.red);
-		client.end();
-		process.exit(0);
 	}
 }
