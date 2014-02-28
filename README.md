@@ -12,5 +12,5 @@ If a user leaves the session and another rejoins, the server can't receive some 
 
 ## Install & run
 
-Just clone this repo and startup index.js with `./index.js` and start up another clien with `./index.js client`.
+Just clone this repo and startup index.js with `./index.js` and start up another client with `./index.js client`.
 
