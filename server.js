@@ -32,5 +32,5 @@ function rebuildClients() {
 	}
 	delete client;
 	client = newClients;
-	x = client.length - 1;
+	x = client.length;
 }
