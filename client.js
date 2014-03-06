@@ -20,8 +20,7 @@ function startClient() {
 		port:parseInt(ip.split(':')[1]),
 		host:ip.split(':')[0]
 	}, function () {
-		console.log('Client connected'.green);
-		console.log(client.address());
+		console.log(('Client connected on ' + ip).green);
 		process.stdin.resume();
 
 		process.stdin.on('data', function (chunk) {
